@@ -21,7 +21,7 @@ public class BasicTestClass {
 
     @BeforeTest
     public void setup() throws Exception {
-        webDriver = WebDriverFactory.buildLocalWebDriver("Chrome");
+        webDriver = WebDriverFactory.buildWebDriver("Chrome");
         webDriver.manage().window().maximize();
     }
 
