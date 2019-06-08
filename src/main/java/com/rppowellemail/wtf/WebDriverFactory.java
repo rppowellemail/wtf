@@ -44,9 +44,11 @@ public class WebDriverFactory {
     public static WebDriver buildRemoteWebDriver(String browserName) throws Exception {
         WebDriver webDriver = null;
         switch (browserName) {
+            case "Remote-Chrome":
             case "Chrome":
+                ChromeOptions capabilities = null;
                 //DesiredCapabilities capabilities = new DesiredCapabilities();
-                ChromeOptions capabilities = new ChromeOptions();
+                capabilities = new ChromeOptions();
                 webDriver = new RemoteWebDriver(new URL("http://127.0.0.1:4444/wd/hub"), capabilities);
                 break;
             default:
