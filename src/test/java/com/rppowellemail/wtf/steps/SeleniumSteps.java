@@ -12,8 +12,8 @@ public class SeleniumSteps {
 
     @Given("^I am on Google Page$")
     public void on_Google_Page() throws Exception {
-        //webDriver = WebDriverFactory.buildWebDriver("Chrome");
-        webDriver = WebDriverFactory.buildRemoteWebDriver("Remote-Chrome");
+        webDriver = WebDriverFactory.buildLocalWebDriver("Chrome");
+        //webDriver = WebDriverFactory.buildRemoteWebDriver("Remote-Chrome");
         webDriver.manage().window().maximize();
 
         webDriver.get("https://www.google.com");
