@@ -17,10 +17,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class DragAndDrop001 {
+// https://elementalselenium.com/tips/39-drag-and-drop
+
+public class DragAndDrop002DnDjsHelper {
     WebDriver webDriver;
 
-    public static final String urlString = "http://jqueryui.com/resources/demos/droppable/default.html";
+    public static final String urlString = "http://the-internet.herokuapp.com/drag_and_drop";
 
     @BeforeTest
     public void setup() throws Exception {
@@ -30,7 +32,7 @@ public class DragAndDrop001 {
     }
 
     @Test
-    public void doTheTest() {
+    public void doTheTest() throws IOException {
         webDriver.get(urlString);
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
@@ -51,17 +53,26 @@ public class DragAndDrop001 {
 
         WebElement draggableElement = (new WebDriverWait(webDriver, 10))
                 .until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//div[@id='draggable']")
+                        By.xpath("//div[@id='column-a']")
                 ));
 
         WebElement droppableElement = (new WebDriverWait(webDriver, 10))
                 .until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//div[@id='droppable']")
+                        By.xpath("//div[@id='column-b']")
                 ));
 
-        //(new Actions(webDriver)).dragAndDrop(draggableElement, droppableElement).perform();
 
-        (new Actions(webDriver)).clickAndHold(draggableElement).pause(2000).moveToElement(droppableElement).pause(2000).release().build().perform();
+        //(new Actions(webDriver)).dragAndDrop(draggableElement, droppableElement).perform();
+        //(new Actions(webDriver)).clickAndHold(draggableElement).pause(2000).moveToElement(droppableElement).pause(2000).release().build().perform();
+
+        File dndjsHelperfile = new File(
+            getClass().getClassLoader().getResource("dnd.js").getFile()
+        );
+
+        String dndJs = FileUtils.readFileToString(dndjsHelperfile, "utf-8");
+        dndJs = dndJs + "$('#column-a').simulateDragDrop({ dropTarget: '#column-b'});";
+
+        ((JavascriptExecutor)webDriver).executeScript(dndJs);
 
         u = dateFormat.format(new Date()) + "-" + String.format("%04d", r.nextInt(10000));
         filename = this.getClass().getSimpleName() + "." + (new Object(){}.getClass().getEnclosingMethod().getName()) + "-after-" + u + ".png";
@@ -75,11 +86,9 @@ public class DragAndDrop001 {
 
     }
 
-    @AfterTest
-    public void teardown() {
-        webDriver.close();
-        webDriver.quit();
-    }
-
-
+//    @AfterTest
+//    public void teardown() {
+//        webDriver.close();
+//        webDriver.quit();
+//    }
 }
